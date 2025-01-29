@@ -1,5 +1,6 @@
 #MAQUINA #DOCKERLABS #MUY_FACIL
 <hr>
+
 # RECONOCIMIENTO
 
 Vamos a resolver **sjd** de la plataforma **DockerLabs**.
