@@ -3,7 +3,7 @@
 Bienvenido a **PwnVault**, un repositorio dedicado a la recopilación de write-ups de máquinas CTF, técnicas de pentesting y recursos de ciberseguridad ofensiva.  
 
 ## 📂 Contenido  
-🔹 Write-ups de máquinas de **Hack The Box**, **TryHackMe** y otros CTFs.  
+🔹 Write-ups de máquinas de **DockerLabs**, **Hack The Box**, **TryHackMe** y otros CTFs.  
 🔹 Técnicas de explotación, post-explotación y escalada de privilegios.  
 🔹 Herramientas y scripts útiles para pentesting y Red Teaming.  
 
