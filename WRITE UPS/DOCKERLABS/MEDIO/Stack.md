@@ -1,7 +1,8 @@
 #MAQUINA #DOCKERLABS #MEDIO 
 #LFI
 <hr>
-# RECONOCIMIENTO
+
+#  RECONOCIMIENTO
 
 Vamos a resolver **Stack** de la plataforma **DockerLabs**.
 

@@ -1,6 +1,7 @@
 #MAQUINA #DOCKERLABS #MEDIO 
 #OPENSSL
 <hr>
+
 # RECONOCIMIENTO
 
 Vamos a resolver **Stranger** de la plataforma **DockerLabs**.
