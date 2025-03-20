@@ -53,7 +53,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.70 seconds
 - **`-Pn`**: Trata el objetivo como si estuviera en línea; omite el descubrimiento de hosts.
 - **`-p-`**: Escanea todos los 65535 puertos en lugar de solo los más comunes.
 
-**Conclusiones:** El ttl al ser 64 nos dice que es una máquina **Linux**. Además, vemos que tiene el puerto **80(HTTP)** y el puerto **22(SSH)** biertos.
+**Conclusiones:** El ttl al ser 64 nos dice que es una máquina **Linux**. Además, vemos que tiene el puerto **80(HTTP)** y el puerto **22(SSH)** abiertos.
 
 Ahora vamos a hacer un escaneo con mayor detalle:
 
