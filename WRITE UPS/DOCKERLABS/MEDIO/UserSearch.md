@@ -8,7 +8,7 @@ Vamos a resolver **UserSearch** de la plataforma **DockerLabs**.
 
    ```bash
 
-Máquina desplegada, su dirección IP es --> 172.17.0.2
+Máquina desplegada, su dirección IP es --> 172.18.0.2
 
 ```
 
