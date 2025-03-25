@@ -278,7 +278,6 @@ bash-5.2# whoami
 root
 bash-5.2# 
 
-
 ```
 
 **YA ESTAMOS COMO ROOT.**
